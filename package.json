@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "b": "yarn zx scripts/build.mjs",
+    "r": "yarn zx scripts/run.mjs",
+    "o": "yarn zx scripts/open.mjs",
+    "k": "yarn zx scripts/kill.mjs",
+    "p": "yarn zx scripts/perf-test.mjs"
+  },
+  "dependencies": {
+    "autocannon": "^7.5.0",
+    "cli-table3": "^0.6.0",
+    "dotenv": "^10.0.0",
+    "pretty-bytes": "^5.6.0",
+    "zx": "^4.2.0"
+  }
+}
