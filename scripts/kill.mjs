@@ -2,7 +2,7 @@
 
 import "zx/globals"
 
-import {nuxtPort, vitePort, vitePlugPort} from "../config/urls.mjs"
+import {nuxtPort, vitePort, vitePlugPort, viteLibPort} from "../config/urls.mjs"
 
 async function killOnPort (port) {
   try {
@@ -19,6 +19,6 @@ async function killOnPort (port) {
   }
 }
 
-[nuxtPort, vitePort, vitePlugPort].forEach(killOnPort)
+[nuxtPort, vitePort, vitePlugPort, viteLibPort].forEach(killOnPort)
 
 

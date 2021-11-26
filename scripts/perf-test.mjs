@@ -5,7 +5,7 @@ import "zx/globals"
 import autocannon from "autocannon"
 import prettyBytes from "pretty-bytes"
 
-import {nuxtUrl, viteUrl, vitePlugUrl} from "../config/urls.mjs"
+import {nuxtUrl, viteUrl, vitePlugUrl, viteLibUrl} from "../config/urls.mjs"
 import {amount, connections, workers} from "../config/autocannon.mjs"
 
 import prettyObjects from "../utils/pretty-object.mjs"
@@ -42,10 +42,11 @@ function getPerf(name, url) {
   })
 }
 
-const [nuxt, vite, vitePlug] = await Promise.all([
+const [nuxt, vite, vitePlug, viteLib] = await Promise.all([
   getPerf("nuxt", nuxtUrl),
   getPerf("vite-custom", viteUrl),
   getPerf("vite-plugin", vitePlugUrl),
+  getPerf("vite-library", viteLibUrl),
 ]);
 
 const prettyKey = (key) => {
@@ -57,7 +58,7 @@ const prettyKey = (key) => {
   return key
 }
 
-const prettyResult = (type, obj, index) => {
+const prettyResult = (type, obj) => {
   const format = {
     latency: v => `${v} ms`,
     requests: v => `${v} rps`,
@@ -66,7 +67,7 @@ const prettyResult = (type, obj, index) => {
 
   return Object.entries(obj).reduce((o, [k, v]) => {
     if(k === "name" || k === "total") o[k] = v
-    else o[prettyKey(k)] = (index >= 2 ? v : format(v))
+    else o[prettyKey(k)] = format(v)
     return o
   }, {})
 }
@@ -77,9 +78,10 @@ for await (const key of ["latency", "requests"]) {
   const nuxtPerfData = nuxt[key]
   const vitePerfData = vite[key]
   const vitePlugPerfData = vitePlug[key]
+  const viteLibPerfData = viteLib[key]
 
 
-  const objects = [nuxtPerfData, vitePerfData, vitePlugPerfData].map((o, i) => prettyResult(key, o, i))
+  const objects = [nuxtPerfData, vitePerfData, vitePlugPerfData, viteLibPerfData].map((o) => prettyResult(key, o))
   await fs.writeFile(`./store/perf-${key}.log`, prettyObjects(...objects))
 }
 
