@@ -12,3 +12,8 @@ cd app/nuxt
 yarn build
 `
 
+$`
+cd app/vsrrpl
+yarn build
+`
+

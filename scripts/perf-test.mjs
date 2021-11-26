@@ -5,7 +5,7 @@ import "zx/globals"
 import autocannon from "autocannon"
 import prettyBytes from "pretty-bytes"
 
-import {nuxtUrl, viteUrl} from "../config/urls.mjs"
+import {nuxtUrl, viteUrl, vitePlugUrl} from "../config/urls.mjs"
 import {amount, connections, workers} from "../config/autocannon.mjs"
 
 import prettyObjects from "../utils/pretty-object.mjs"
@@ -42,9 +42,10 @@ function getPerf(name, url) {
   })
 }
 
-const [nuxt, vite] = await Promise.all([
+const [nuxt, vite, vitePlug] = await Promise.all([
   getPerf("nuxt", nuxtUrl),
-  getPerf("vite", viteUrl),
+  getPerf("vite-custom", viteUrl),
+  getPerf("vite-plugin", vitePlugUrl),
 ]);
 
 const prettyKey = (key) => {
@@ -75,17 +76,10 @@ const prettyResult = (type, obj, index) => {
 for await (const key of ["latency", "requests"]) {
   const nuxtPerfData = nuxt[key]
   const vitePerfData = vite[key]
+  const vitePlugPerfData = vitePlug[key]
 
-  const rel = (key, type, a, b) => key === "name" ? type : `${(a[key] / b[key] * 100).toFixed(2)}%`
-  const nuxtBetterVite = Object.entries(nuxtPerfData).reduce((o, [k, v]) => ({ ...o, [k]: rel(k, "nuxt", nuxtPerfData, vitePerfData) }), {})
-  const viteBetterNuxt = Object.entries(vitePerfData).reduce((o, [k, v]) => ({ ...o, [k]: rel(k, "vite", vitePerfData, nuxtPerfData) }), {})
 
-  const which = (key, aType, bType, a, b) => key === "name" ? "better" : (a[key] === b[key] ? "==" : (a[key] < b[key] ? bType : aType))
-  const better = Object.entries(vitePerfData).reduce((o, [k, v]) => ({ ...o, [k]: which(k, "vite", "nuxt", vitePerfData, nuxtPerfData) }), {})
-
-  // TODO improve comparison
-  // const objects = [nuxtPerfData, vitePerfData, nuxtBetterVite, viteBetterNuxt, better].map((o, i) => prettyResult(key, o, i))
-  const objects = [nuxtPerfData, vitePerfData].map((o, i) => prettyResult(key, o, i))
+  const objects = [nuxtPerfData, vitePerfData, vitePlugPerfData].map((o, i) => prettyResult(key, o, i))
   await fs.writeFile(`./store/perf-${key}.log`, prettyObjects(...objects))
 }
 

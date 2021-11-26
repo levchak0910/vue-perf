@@ -2,7 +2,7 @@
 
 import "zx/globals"
 
-import {nuxtPort, vitePort} from "../config/urls.mjs"
+import {nuxtPort, vitePort, vitePlugPort} from "../config/urls.mjs"
 
 async function killOnPort (port) {
   try {
@@ -11,7 +11,7 @@ async function killOnPort (port) {
     let processIds = processes.map(p => p.split(" ").filter(Boolean)[1]).filter(Boolean)
     processIds = [...new Set(processIds)]
     for await (const processId of processIds) {
-      await $`kill ${processId}`
+      await $`kill -9 ${processId}`
     }
   }
   catch (e) {
@@ -19,6 +19,6 @@ async function killOnPort (port) {
   }
 }
 
-[nuxtPort, vitePort].forEach(killOnPort)
+[nuxtPort, vitePort, vitePlugPort].forEach(killOnPort)
 
 
