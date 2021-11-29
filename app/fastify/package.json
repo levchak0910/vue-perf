@@ -1,0 +1,50 @@
+{
+  "author": "Evan You <yyx990803@gmail.com>",
+  "contributors": [
+    {
+      "name": "Sebastien Chopin (@Atinux)"
+    },
+    {
+      "name": "Alexandre Chopin (@alexchopin)"
+    },
+    {
+      "name": "Pooya Parsa (@pi0)"
+    },
+    {
+      "name": "Jonas Galvez (@anothergalvez)"
+    }
+  ],
+  "scripts": {
+    "dev": "node server/main",
+    "lint": "eslint . --ext js,vue --fix",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build --ssrManifest --outDir dist/client",
+    "build:server": "vite build --ssr entry/server.js --outDir dist/server",
+    "serve": "cross-env NODE_ENV=production node server/main",
+    "debug": "node --inspect-brk server"
+  },
+  "dependencies": {
+    "@vueuse/head": "^0.5.1",
+    "vue": "^3.0.6",
+    "vue-router": "^4.0.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.0.0",
+    "@vitejs/plugin-vue-jsx": "^1.1.2",
+    "@vue/compiler-sfc": "^3.0.7",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.22.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-vue": "^7.7.0",
+    "fastify": "^3.13.0",
+    "fastify-api": "^0.1.0",
+    "fastify-vite": "2.0.3",
+    "got": "^11.8.2",
+    "nodemon": "^2.0.7",
+    "stylus": "^0.54.8",
+    "vite": "^2.0.5"
+  }
+}
