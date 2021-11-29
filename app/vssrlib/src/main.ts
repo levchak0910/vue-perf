@@ -1,4 +1,9 @@
 import viteSSR from 'vite-ssr/vue'
 import App from './App.vue'
 
-export default viteSSR(App, { routes: [] })
+import AppFetch from "./business/Fetch.vue";
+
+export default viteSSR(App, { routes: [{
+  path: "/",
+  component: AppFetch
+}] })

@@ -1,18 +1,8 @@
 <template>
   <div>
     <Suspense>
-      <AppFetch />
+      <router-view />
     </Suspense>
   </div>
 </template>
 
-<script lang="ts">
-import AppFetch from "./business/Fetch.vue";
-
-export default {
-  components: {
-    AppFetch,
-  },
-
-};
-</script>
