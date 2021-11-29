@@ -17,3 +17,8 @@ cd app/vssrlib
 yarn build
 `
 
+$`
+cd app/fastify
+yarn build
+`
+
