@@ -13,11 +13,6 @@ yarn build
 `
 
 $`
-cd app/vsrrpl
-yarn build
-`
-
-$`
 cd app/vssrlib
 yarn build
 `

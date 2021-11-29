@@ -8,7 +8,5 @@ $`xdg-open ${nuxtUrl}`
 
 $`xdg-open ${viteUrl}`
 
-$`xdg-open ${vitePlugUrl}`
-
 $`xdg-open ${viteLibUrl}`
 
