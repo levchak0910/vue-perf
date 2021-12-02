@@ -42,12 +42,29 @@ function getPerf(name, url) {
   })
 }
 
-const [nuxt, vite, viteLib, fastify] = await Promise.all([
-  getPerf("nuxt", nuxtUrl),
-  getPerf("vite-custom", viteUrl),
-  getPerf("vite-library", viteLibUrl),
-  getPerf("fastify", fastifyUrl),
-]);
+// const [nuxt, vite, viteLib, fastify] = await Promise.all([
+//   getPerf("nuxt", nuxtUrl),
+//   getPerf("vite-custom", viteUrl),
+//   getPerf("vite-library", viteLibUrl),
+//   getPerf("fastify", fastifyUrl),
+// ]);
+
+console.time("nuxt")
+const nuxt = await getPerf("nuxt", nuxtUrl)
+console.timeEnd("nuxt")
+
+console.time("vite custom")
+const vite = await getPerf("vite-custom", viteUrl)
+console.timeEnd("vite custom")
+
+console.time("vite lib")
+const viteLib = await getPerf("vite-library", viteLibUrl)
+console.timeEnd("vite lib")
+
+console.time("fastify")
+const fastify = await getPerf("fastify", fastifyUrl)
+console.timeEnd("fastify")
+
 
 const prettyKey = (key) => {
   if(/^p\d/.test(key)) {
