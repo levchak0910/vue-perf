@@ -49,22 +49,25 @@ function getPerf(name, url) {
 //   getPerf("fastify", fastifyUrl),
 // ]);
 
-console.time("nuxt")
-const nuxt = await getPerf("nuxt", nuxtUrl)
-console.timeEnd("nuxt")
+const apps = [
+  {name: "nuxt", url: nuxtUrl},
+  {name: "vite-custom", url: viteUrl},
+  {name: "vite-library", url: viteLibUrl},
+  {name: "fastify", url: fastifyUrl},
+]
 
-console.time("vite custom")
-const vite = await getPerf("vite-custom", viteUrl)
-console.timeEnd("vite custom")
+const results = []
+for await (let app of apps) {
+  const timeStart = Date.now()
+  const appPerfData = await getPerf(app.name, app.url)
+  const timeSpend = Date.now() - timeStart
 
-console.time("vite lib")
-const viteLib = await getPerf("vite-library", viteLibUrl)
-console.timeEnd("vite lib")
+  Object.keys(appPerfData).forEach(key => {
+    appPerfData[key].time = timeSpend
+  })
 
-console.time("fastify")
-const fastify = await getPerf("fastify", fastifyUrl)
-console.timeEnd("fastify")
-
+  results.push(appPerfData)
+}
 
 const prettyKey = (key) => {
   if(/^p\d/.test(key)) {
@@ -76,14 +79,16 @@ const prettyKey = (key) => {
 }
 
 const prettyResult = (type, obj) => {
-  const format = {
+  const formats = {
     latency: v => `${v} ms`,
     requests: v => `${v} rps`,
     throughput: prettyBytes,
-  }[type]
+  }
+  const format = formats[type]
 
   return Object.entries(obj).reduce((o, [k, v]) => {
     if(k === "name" || k === "total") o[k] = v
+    else if(k === "time") o[k] = formats.latency(v)
     else o[prettyKey(k)] = format(v)
     return o
   }, {})
@@ -92,13 +97,7 @@ const prettyResult = (type, obj) => {
 // TODO throughout is not correct because in vite ssr deduplication is not realized
 // for await (const key of ["latency", "requests", "throughput"]) {
 for await (const key of ["latency", "requests"]) {
-  const nuxtPerfData = nuxt[key]
-  const vitePerfData = vite[key]
-  const viteLibPerfData = viteLib[key]
-  const fastifyPerfData = fastify[key]
-
-
-  const objects = [nuxtPerfData, vitePerfData, viteLibPerfData, fastifyPerfData].map((o) => prettyResult(key, o))
+  const objects = results.map((o) => prettyResult(key, o[key]))
   await fs.writeFile(`./store/perf-${key}.log`, prettyObjects(...objects))
 }
 
