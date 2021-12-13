@@ -2,7 +2,7 @@
 
 import "zx/globals"
 
-import {vitePort, nuxtPort, viteLibPort, fastifyPort} from "../config/urls.mjs"
+import {vitePort, nuxtPort, viteLibPort, fastifyPort, nextPort} from "../config/urls.mjs"
 
 $`
 cd app/vite-ssr
@@ -22,4 +22,9 @@ PORT=${viteLibPort} yarn serve
 $`
 cd  app/fastify
 PORT=${fastifyPort} yarn serve
+`
+
+$`
+cd  app/next
+PORT=${nextPort} yarn start
 `

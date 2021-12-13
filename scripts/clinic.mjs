@@ -11,6 +11,8 @@ import {
   viteLibUrl,
   fastifyPort,
   fastifyUrl,
+  nextPort,
+  nextUrl,
 } from "../config/urls.mjs"
 
 import {amount, connections, workers} from "../config/autocannon.mjs"
@@ -43,6 +45,7 @@ const promises = [
   [vitePort, viteUrl, "app/vite-ssr/server-prod.js", "Custom Vite"],
   [viteLibPort, viteLibUrl, "app/vssrlib/server.js", "Vite SSR lib"],
   [fastifyPort, fastifyUrl, "app/fastify/server/main.js", "Fastify"],
+  [nextPort, nextUrl, "app/next/node_modules/next/dist/bin/next start", "Next"],
 ].map(args => writeClinicReport(...args))
 
 await Promise.all(promises)

@@ -5,7 +5,7 @@ import "zx/globals"
 import autocannon from "autocannon"
 import prettyBytes from "pretty-bytes"
 
-import {nuxtUrl, viteUrl, viteLibUrl, fastifyUrl} from "../config/urls.mjs"
+import {nuxtUrl, viteUrl, viteLibUrl, fastifyUrl, nextUrl} from "../config/urls.mjs"
 import {amount, connections, workers} from "../config/autocannon.mjs"
 
 import prettyObjects from "../utils/pretty-object.mjs"
@@ -54,6 +54,7 @@ const apps = [
   {name: "vite-custom", url: viteUrl},
   {name: "vite-library", url: viteLibUrl},
   {name: "fastify", url: fastifyUrl},
+  {name: "next", url: nextUrl},
 ]
 
 const results = []

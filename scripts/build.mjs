@@ -22,3 +22,8 @@ cd app/fastify
 yarn build
 `
 
+$`
+cd app/next
+yarn build
+`
+
