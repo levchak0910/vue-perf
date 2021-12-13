@@ -1,3 +1,4 @@
+const path = require('path')
 const fastify = require('fastify')()
 const fastifyVite = require('fastify-vite')
 const fastifyApi = require('fastify-api')
@@ -6,6 +7,7 @@ async function main () {
   await fastify.register(fastifyApi)
   await fastify.register(fastifyVite, {
     api: false,
+    rootDir: path.resolve(__dirname, '../'),
     clientEntryPath: '/entry/client.js',
     serverEntryPath: '/entry/server.js'
   })
