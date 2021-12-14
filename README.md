@@ -6,10 +6,11 @@
 
 ```bash
 yarn install
-cd app/nuxt && install
-cd app/vite-ssr && install
-cd app/fastify && install
-cd app/vssrlib && install
+cd app/nuxt && yarn install
+cd app/vite-ssr && yarn install
+cd app/fastify && yarn install
+cd app/vssrlib && yarn install
+cd app/next && yarn install
 ```
 
 ### Build apps
@@ -29,5 +30,5 @@ yarn p
 ```bash
 yarn c <option?>
 ```
-option = doctor|d | bubbleprof|b | flame|f | heapprofiler|h  
-default = doctor  
+- option = doctor | d | bubbleprof | b | flame | f | heapprofiler | h  
+- default = doctor  
