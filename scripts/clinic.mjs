@@ -19,10 +19,15 @@ import {amount, connections, workers} from "../config/autocannon.mjs"
 
 import { killProcessesOnPort } from "../functions/kill-processes-on-port.mjs"
 
+const commands = ["doctor", "bubbleprof", "flame", "heapprofiler"]
+const shortCommands = ["d", "b", "f", "h"].reduce((o, c, i) => ({...o, [c]: commands[i]}), {})
+const arg = process.argv[3]?.length === 1 ? shortCommands[process.argv[3]] : process.argv[3]
+const command = commands.includes(arg) ? arg : commands[0]
+
 await $`yarn k`
 
 async function writeClinicReport(port, url, script, name) {
-  const clinic = $`PORT=${port} NODE_ENV=production node node_modules/.bin/clinic doctor --open=false --dest=clinic -- node ${script}`
+  const clinic = $`PORT=${port} NODE_ENV=production node node_modules/.bin/clinic ${command} --open=false --dest=clinic -- node ${script}`
   await sleep(1000)
 
   await $`yarn autocannon ${url} -a ${amount} -c ${connections} -w ${workers}`
@@ -45,7 +50,8 @@ const promises = [
   [vitePort, viteUrl, "app/vite-ssr/server-prod.js", "Custom Vite"],
   [viteLibPort, viteLibUrl, "app/vssrlib/server.js", "Vite SSR lib"],
   [fastifyPort, fastifyUrl, "app/fastify/server/main.js", "Fastify"],
-  [nextPort, nextUrl, "app/next/node_modules/next/dist/bin/next start", "Next"],
+  // problems with cwd
+  // [nextPort, nextUrl, "app/next/node_modules/next/dist/bin/next start", "Next"],
 ].map(args => writeClinicReport(...args))
 
 await Promise.all(promises)

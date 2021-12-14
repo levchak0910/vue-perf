@@ -27,5 +27,7 @@ yarn p
 ### Run clinic doctor 
 
 ```bash
-yarn c
+yarn c <option?>
 ```
+option = doctor|d | bubbleprof|b | flame|f | heapprofiler|h  
+default = doctor  
