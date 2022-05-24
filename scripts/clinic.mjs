@@ -49,10 +49,10 @@ async function writeClinicReport(port, url, script, name) {
 
 const promises = [
   [nuxtPort, nuxtUrl, "app/nuxt/.output/server/index.mjs", "Nuxt"],
-  [vitePort, viteUrl, "app/vite-ssr/server-prod.js", "Custom Vite"],
-  [viteLibPort, viteLibUrl, "app/vssrlib/server.js", "Vite SSR lib"],
-  [fastifyPort, fastifyUrl, "app/fastify/server/main.js", "Fastify"],
-  [fvbPort, fvbUrl, "app/fastify-vite-beta/server.js", "Fastify Vite (beta)"],
+  [vitePort, viteUrl, "app/vite-koa/server-prod.js", "Custom Vite + Koa"],
+  [viteLibPort, viteLibUrl, "app/vite-ssr-lib-express/server.js", "Vite SSR lib + Express"],
+  [fastifyPort, fastifyUrl, "app/fastify-vite-2/server/main.js", "Fastify Vite v2"],
+  [fvbPort, fvbUrl, "app/fastify-vite-3_beta/server.js", "Fastify Vite v3.beta"],
   // problems with cwd
   // [nextPort, nextUrl, "app/next/node_modules/next/dist/bin/next start", "Next"],
 ].map(args => writeClinicReport(...args))

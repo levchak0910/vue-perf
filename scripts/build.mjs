@@ -3,7 +3,7 @@
 import "zx/globals"
 
 $`
-cd app/vite-ssr
+cd app/vite-koa
 yarn build
 `
 
@@ -13,17 +13,17 @@ yarn build
 `
 
 $`
-cd app/vssrlib
+cd app/vite-ssr-lib-express
 yarn build
 `
 
 $`
-cd app/fastify
+cd app/fastify-vite-2
 yarn build
 `
 
 $`
-cd app/fastify-vite-beta
+cd app/fastify-vite-3_beta
 yarn build
 `
 

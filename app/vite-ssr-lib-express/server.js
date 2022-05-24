@@ -1,7 +1,7 @@
 const path = require('path')
 const express = require('express')
 
-const example = "vssrlib"
+const example = "vite-ssr-lib-express"
 
 const dist = `../${example}/dist`
 

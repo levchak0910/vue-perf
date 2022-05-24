@@ -51,10 +51,10 @@ function getPerf(name, url) {
 
 const apps = [
   {name: "nuxt", url: nuxtUrl},
-  {name: "vite-custom", url: viteUrl},
-  {name: "vite-library", url: viteLibUrl},
-  {name: "fastify", url: fastifyUrl},
-  {name: "fastify-vite-beta", url: fvbUrl},
+  {name: "custom-vite-koa", url: viteUrl},
+  {name: "vite-ssr-lib-express", url: viteLibUrl},
+  {name: "fastify-vite-2", url: fastifyUrl},
+  {name: "fastify-vite-3.beta", url: fvbUrl},
   {name: "next", url: nextUrl},
 ]
 
