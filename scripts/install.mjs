@@ -3,7 +3,7 @@
 import "zx/globals"
 
 $`
-cd app/vite-koa
+cd app/vite-custom-server
 yarn install
 `
 

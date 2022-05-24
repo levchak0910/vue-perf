@@ -2,7 +2,9 @@
 
 import "zx/globals"
 
-import {nuxtUrl, viteUrl, viteLibUrl, fastifyUrl, fvbUrl, nextUrl} from "../config/urls.mjs"
+import {viteNodeUrl, nuxtUrl, viteUrl, viteLibUrl, fastifyUrl, fvbUrl, nextUrl} from "../config/urls.mjs"
+
+$`xdg-open ${viteNodeUrl}`
 
 $`xdg-open ${nuxtUrl}`
 

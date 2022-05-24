@@ -3,6 +3,8 @@
 import "zx/globals"
 
 import {
+  viteNodePort,
+  viteNodeUrl,
   vitePort,
   viteUrl,
   nuxtPort,
@@ -49,7 +51,8 @@ async function writeClinicReport(port, url, script, name) {
 
 const promises = [
   [nuxtPort, nuxtUrl, "app/nuxt/.output/server/index.mjs", "Nuxt"],
-  [vitePort, viteUrl, "app/vite-koa/server-prod.js", "Custom Vite + Koa"],
+  [viteNodePort, viteNodeUrl, "app/vite-custom-server/server-prod-node.js", "Vite + Node"],
+  [vitePort, viteUrl, "app/vite-custom-server/server-prod-koa.js", "Vite + Koa"],
   [viteLibPort, viteLibUrl, "app/vite-ssr-lib-express/server.js", "Vite SSR lib + Express"],
   [fastifyPort, fastifyUrl, "app/fastify-vite-2/server/main.js", "Fastify Vite v2"],
   [fvbPort, fvbUrl, "app/fastify-vite-3_beta/server.js", "Fastify Vite v3.beta"],

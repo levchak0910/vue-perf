@@ -5,7 +5,7 @@ import "zx/globals"
 import autocannon from "autocannon"
 import prettyBytes from "pretty-bytes"
 
-import {nuxtUrl, viteUrl, viteLibUrl, fastifyUrl, fvbUrl, nextUrl} from "../config/urls.mjs"
+import {viteNodeUrl, nuxtUrl, viteUrl, viteLibUrl, fastifyUrl, fvbUrl, nextUrl} from "../config/urls.mjs"
 import {amount, connections, workers} from "../config/autocannon.mjs"
 
 import prettyObjects from "../utils/pretty-object.mjs"
@@ -51,7 +51,8 @@ function getPerf(name, url) {
 
 const apps = [
   {name: "nuxt", url: nuxtUrl},
-  {name: "custom-vite-koa", url: viteUrl},
+  {name: "vite-node", url: viteNodeUrl},
+  {name: "vite-koa", url: viteUrl},
   {name: "vite-ssr-lib-express", url: viteLibUrl},
   {name: "fastify-vite-2", url: fastifyUrl},
   {name: "fastify-vite-3.beta", url: fvbUrl},
