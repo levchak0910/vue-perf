@@ -23,6 +23,11 @@ yarn build
 `
 
 $`
+cd app/fastify-vite-beta
+yarn build
+`
+
+$`
 cd app/next
 yarn build
 `
