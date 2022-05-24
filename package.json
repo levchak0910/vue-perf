@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "i": "yarn && yarn zx scripts/install.mjs",
     "b": "yarn zx scripts/build.mjs",
     "r": "yarn zx scripts/run.mjs",
     "o": "yarn zx scripts/open.mjs",
