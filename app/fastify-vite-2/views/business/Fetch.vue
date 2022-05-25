@@ -44,10 +44,10 @@ export default {
 
     const setData = async () => {
       const [c,p,f,u] = await Promise.all([
-        import("../../../../db/comments.json"),
-        import("../../../../db/posts.json"),
-        import("../../../../db/photos.json"),
-        import("../../../../db/characters.json"),
+        import("../../../../db/data/comments.json"),
+        import("../../../../db/data/posts.json"),
+        import("../../../../db/data/photos.json"),
+        import("../../../../db/data/characters.json"),
       ])
 
       posts.value = p.default;

@@ -11,6 +11,12 @@ import {amount, connections, workers} from "../config/autocannon.mjs"
 import prettyObjects from "../utils/pretty-object.mjs"
 
 await $`yarn k`
+
+const generation = await $`yarn g ${process.argv[3]}`
+if(!generation.stdout.includes("NOT_CHANGED")) {
+  await $`yarn b`
+}
+
 $`yarn r`
 
 await sleep(2000)

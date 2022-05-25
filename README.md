@@ -1,6 +1,6 @@
 # Vue SSR performance comparison
 
-## Getting started
+## Prepare for tests
 
 ### Install dependencies
 
@@ -8,17 +8,36 @@
 yarn i
 ```
 
+### Generate data
+
+```bash
+yarn g <data-size?>
+```
+
+- data-size = large | l | medium | m | small | s  
+- default = large  
+
+data-size:
+
+1. large - 47.5K DOM nodes
+2. medium - 20K DOM nodes
+3. large - 3.5K DOM nodes
+
 ### Build apps
 
 ```bash
 yarn b
 ```
 
+## Run tests
+
 ### Run performance tests
 
 ```bash
-yarn p
+yarn p <data-size?>
 ```
+
+Output: in folder: `store`
 
 ### Run clinic doctor
 
