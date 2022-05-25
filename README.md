@@ -39,7 +39,7 @@ yarn p <data-size?>
 
 Output: in folder: `store`
 
-### Run clinic doctor
+### Run clinic
 
 ```bash
 yarn c <option?>

@@ -24,16 +24,14 @@ import {
 import {amount, connections, workers} from "../config/autocannon.mjs"
 
 import { killProcessesOnPort } from "../functions/kill-processes-on-port.mjs"
+import { getArg } from "../functions/get-cli-arg.mjs"
 
-const commands = ["doctor", "bubbleprof", "flame", "heapprofiler"]
-const shortCommands = ["d", "b", "f", "h"].reduce((o, c, i) => ({...o, [c]: commands[i]}), {})
-const arg = process.argv[3]?.length === 1 ? shortCommands[process.argv[3]] : process.argv[3]
-const command = commands.includes(arg) ? arg : commands[0]
+const command = getArg(["doctor", "bubbleprof", "flame", "heapprofiler"])
 
 await $`yarn k`
 
 async function writeClinicReport(port, url, script, name) {
-  const clinic = $`PORT=${port} NODE_ENV=production node node_modules/.bin/clinic ${command} --open=false --dest=clinic -- node ${script}`
+  const clinic = $`PORT=${port} NODE_ENV=production node node_modules/.bin/clinic ${command} --open=false -- node ${script}`
   await sleep(1000)
 
   await $`yarn autocannon ${url} -a ${amount} -c ${connections} -w ${workers}`
@@ -44,7 +42,14 @@ async function writeClinicReport(port, url, script, name) {
   const filePath = "/" + outputLine.split("///")[1]
 
   let fileContent = await fs.readFile(filePath, {encoding: "utf-8"})
-  fileContent = fileContent.replace("<title>Clinic Doctor</title>", `<title>Doctor for ${name} project</title>`)
+
+  const startTag = "<title>"
+  const endTag = "</title>"
+  const startInd = fileContent.indexOf(startTag)
+  const endInd = fileContent.indexOf(endTag)
+  const start = fileContent.slice(0, startInd)
+  const end = fileContent.slice(endInd + endTag.length + 1)
+  fileContent = start + `<title>${name} | Clinic ${command}</title>` + end
 
   await fs.writeFile(filePath, fileContent)
 
