@@ -21,7 +21,7 @@ data-size:
 
 1. large - 47.5K DOM nodes
 2. medium - 20K DOM nodes
-3. large - 3.5K DOM nodes
+3. small - 3.5K DOM nodes
 
 ### Build apps
 
