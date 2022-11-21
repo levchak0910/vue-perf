@@ -2,8 +2,10 @@
 
 import "zx/globals"
 
-import {viteNodePort, nuxtPort, vitePort, viteLibPort, fastifyPort, fvbPort, nextPort, fcPort} from "../config/urls.mjs"
+import * as config from "../config/urls.mjs"
 
 import { killProcessesOnPorts } from "../functions/kill-processes-on-port.mjs"
 
-await killProcessesOnPorts([viteNodePort, nuxtPort, vitePort, viteLibPort, fastifyPort, fvbPort, nextPort, fcPort], {exit: true})
+const ports = Object.keys(config).filter(key => key.endsWith("Port")).map(portKey => config[portKey])
+
+await killProcessesOnPorts(ports, {exit: true})

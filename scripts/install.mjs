@@ -3,27 +3,17 @@
 import "zx/globals"
 
 $`
-cd app/vite-custom-server
-yarn install
-`
-
-$`
 cd app/nuxt
 yarn install
 `
 
 $`
-cd app/vite-ssr-lib-express
+cd app/vite-ssr
 yarn install
 `
 
 $`
-cd app/fastify-vite-2
-yarn install
-`
-
-$`
-cd app/fastify-vite-3_beta
+cd app/fastify-vite
 yarn install
 `
 

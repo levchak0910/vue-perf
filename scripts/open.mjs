@@ -2,21 +2,10 @@
 
 import "zx/globals"
 
-import {viteNodeUrl, nuxtUrl, viteUrl, viteLibUrl, fastifyUrl, fvbUrl, nextUrl, fcUrl} from "../config/urls.mjs"
+import * as config from "../config/urls.mjs"
 
-$`xdg-open ${viteNodeUrl}`
+const urls = Object.keys(config).filter(key => key.endsWith("Url")).map(urlKey => config[urlKey])
 
-$`xdg-open ${nuxtUrl}`
-
-$`xdg-open ${viteUrl}`
-
-$`xdg-open ${viteLibUrl}`
-
-$`xdg-open ${fastifyUrl}`
-
-$`xdg-open ${fvbUrl}`
-
-$`xdg-open ${nextUrl}`
-
-$`xdg-open ${fcUrl}`
-
+urls.forEach(url => {
+  $`xdg-open ${url}`
+})

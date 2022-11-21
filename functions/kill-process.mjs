@@ -23,7 +23,6 @@ export async function killProcess (processId, options = {}) {
   if (options.exit) mod = " -9"
 
   try {
-    console.log("🚀 ~ killProcess ~ `kill${mod} ${processId}`", `kill${mod} ${processId}`);
     // execSync(`kill${mod} ${processId}`)
     execSync("kill" + mod +" " + processId)
   }
