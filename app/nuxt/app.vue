@@ -1,21 +1,11 @@
 <template>
   <div>
-    apiLoadingTime: {{ apiLoadingTime }}
-    <input
-      type="hidden"
-      name="api"
-      :value="apiLoadingTime"
-    >
-    <br>
     ttfb: {{ ttfb }}
     <br>
     tti: {{ tti }}
     <br>
-    complete: {{ complete }}
-
-    <!-- <pre>
-      {{ times }}
-    </pre> -->
+    <br>
+    <br>
 
     <AppData
       :comments="comments"
@@ -72,14 +62,8 @@ export default {
 
     const ttfb = computed(() => times.value.responseStart?.stamp - times.value.requestStart?.stamp);
     const tti = computed(() => times.value.domInteractive?.stamp - times.value.domLoading?.stamp);
-    const complete = computed(() => times.value.domComplete?.stamp - times.value.domLoading?.stamp);
 
-    const apiLoadingTime = ref(0);
-
-    const s = Date.now();
     await setData();
-    if (typeof window === "undefined") apiLoadingTime.value = Date.now() - s;
-    if (typeof window === "object") apiLoadingTime.value = Number(document.querySelector("[name=api]")?.value);
 
     return {
       comments,
@@ -87,11 +71,9 @@ export default {
       photos,
       characters,
 
-      apiLoadingTime,
       times,
       ttfb,
       tti,
-      complete,
     }
   },
 }

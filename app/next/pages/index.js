@@ -2,14 +2,7 @@ import {useEffect, useState} from "react";
 import { AppData } from "../components/AppData";
 
 export default function Home({comments, posts, photos, characters}) {
-    /*
-    const [comments, setComments] = useState([])
-    const [posts, setPosts] = useState([])
-    const [photos, setPhotos] = useState([])
-    const [characters, setCharasters] = useState([])
-     */
     const [times, setTimes] = useState({});
-    const [apiLoadingTime, setApiLoadingTime] = useState(0);
 
     useEffect( () => {
     if (typeof window === "object") {
@@ -22,47 +15,18 @@ export default function Home({comments, posts, photos, characters}) {
         }), {}));
     }}, []);
 
-/*
-
-
-    if(typeof window === "object") {
-        window.times = times
-    }
- */
     const ttfb = times.responseStart?.stamp - times.requestStart?.stamp;
     const tti = times.domInteractive?.stamp - times.domLoading?.stamp;
-    const complete = times.domComplete?.stamp - times.domLoading?.stamp;
-
-
-/*
-    useEffect( async () => {
-        const s = Date.now();
-        // await setData();
-        if (typeof window === "undefined") {
-            setApiLoadingTime(Date.now() - s);
-        }
-        if (typeof window === "object") {
-            setApiLoadingTime(Number(document.querySelector("[name=api]")?.value));
-        }
-    }, [])
-
- */
 
    return (
 
             <div>
-                apiLoadingTime: {apiLoadingTime}
-                <input
-                    type="hidden"
-                    name="api"
-                    value={apiLoadingTime}
-                />
-                <br/>
                 ttfb: {ttfb}
                 <br/>
                 tti: {tti}
                 <br/>
-                complete: {complete}
+                <br/>
+                <br/>
 
                 <AppData
                     comments={comments}
