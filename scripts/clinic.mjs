@@ -3,22 +3,14 @@
 import "zx/globals"
 
 import {
-  viteNodePort,
-  viteNodeUrl,
-  vitePort,
-  viteUrl,
   nuxtPort,
   nuxtUrl,
-  viteLibPort,
-  viteLibUrl,
+  vitePort,
+  viteUrl,
   fastifyPort,
   fastifyUrl,
-  fvbPort,
-  fvbUrl,
   nextPort,
   nextUrl,
-  fcPort,
-  fcUrl,
 } from "../config/urls.mjs"
 
 import {amount, connections, workers} from "../config/autocannon.mjs"
@@ -58,14 +50,10 @@ async function writeClinicReport(port, url, script, name) {
 
 const promises = [
   [nuxtPort, nuxtUrl, "app/nuxt/.output/server/index.mjs", "Nuxt"],
-  [viteNodePort, viteNodeUrl, "app/vite-custom-server/server-prod-node.js", "Vite + Node"],
-  [vitePort, viteUrl, "app/vite-custom-server/server-prod-koa.js", "Vite + Koa"],
-  [fcPort, fcUrl, "app/vite-custom-server/server-prod-fastify.js", "Vite + Fastify"],
-  [viteLibPort, viteLibUrl, "app/vite-ssr-lib-express/server.js", "Vite SSR lib + Express"],
-  [fastifyPort, fastifyUrl, "app/fastify-vite-2/server/main.js", "Fastify Vite v2"],
-  [fvbPort, fvbUrl, "app/fastify-vite-3_beta/server.js", "Fastify Vite v3.beta"],
+  [vitePort, viteUrl, "app/vite-ssr/server-prod.js", "Vite SSR"],
+  [fastifyPort, fastifyUrl, "app/fastify-vite/server.js", "Fastify Vite"],
   // problems with cwd
-  // [nextPort, nextUrl, "app/next/node_modules/next/dist/bin/next start", "Next"],
+  // [nextPort, nextUrl, "app/next/node_modules/.bin/next start", "Next"],
 ].map(args => writeClinicReport(...args))
 
 await Promise.all(promises)
