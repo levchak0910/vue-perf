@@ -22,8 +22,10 @@ export async function main (dev) {
   return server
 }
 
+const PORT = process.env.PORT
+
 if (process.argv[1] === new URL(import.meta.url).pathname) {
   const server = await main()
-  await server.listen({ port: 3000 })
-  console.log(`server started at: http://localhost:3000`)
+  await server.listen({ port: PORT })
+  console.log(`server started at: http://localhost:${PORT}`)
 }
