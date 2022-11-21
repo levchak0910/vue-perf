@@ -11,11 +11,11 @@
     "g": "yarn zx scripts/generate-data.mjs"
   },
   "dependencies": {
-    "autocannon": "^7.5.0",
-    "cli-table3": "^0.6.0",
-    "clinic": "^10.0.0",
-    "dotenv": "^10.0.0",
-    "pretty-bytes": "^5.6.0",
-    "zx": "^4.2.0"
+    "autocannon": "^7.10.0",
+    "cli-table3": "^0.6.3",
+    "clinic": "^12.0.0",
+    "dotenv": "^16.0.3",
+    "pretty-bytes": "^6.0.0",
+    "zx": "^7.1.1"
   }
 }
