@@ -1,14 +1,16 @@
-const http = require("http");
+import http from "node:http"
 
-const path = require("path");
-const fs = require("fs");
-const fsProm = require("fs/promises");
+import path from "node:path"
+import { fileURLToPath } from 'node:url'
+import fs from "node:fs"
+import fsProm from "node:fs/promises"
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const resolve = (p) => path.resolve(__dirname, p);
 
 const template = fs.readFileSync(resolve("dist/client/index.html"), "utf-8");
-const render = require("./dist/server/entry-server.js").render;
-const manifest = require("./dist/client/ssr-manifest.json");
+const { render } = await import('./dist/server/entry-server.js')
+const manifest = JSON.parse(fs.readFileSync(resolve('dist/client/ssr-manifest.json'), 'utf-8'))
 
 const extensions = {
   js: "text/javascript",
@@ -39,33 +41,15 @@ const requestListener = async function (req, res) {
     return;
   }
 
-  const {
-    renderedHtml,
-    notFoundError,
-    shouldRedirectTo,
-    preloadLinks,
-    headTags,
-    htmlAttrs,
-    bodyAttrs,
-  } = await render({}, manifest);
-
-  if (shouldRedirectTo !== undefined) {
-    res.writeHead(301, { Location: shouldRedirectTo }).end();
-    return;
-  }
+  const { html: appHtml, preloadLinks } = await render(manifest);
 
   const html = template
     .replace("<!--preload-links-->", preloadLinks)
-    .replace("<!--app-html-->", renderedHtml)
-    .replace("<html>", `<html${htmlAttrs}>`)
-    .replace("<body>", `<body${bodyAttrs}>`)
-    .replace("<!--head-tags-->", headTags);
-
-  if (notFoundError) {
-    res.writeHead(404).end();
-  }
-
-  res.writeHead(200, { "Content-Type": extensions.html }).end(html);
+    .replace("<!--app-html-->", appHtml)
+  
+  res
+    .writeHead(200, { "Content-Type": extensions.html })
+    .end(html);
 };
 
 const server = http.createServer(requestListener);

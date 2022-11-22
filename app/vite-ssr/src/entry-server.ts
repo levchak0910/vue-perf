@@ -1,78 +1,59 @@
-import { createSSRApp } from "vue";
-import { renderToString } from "@vue/server-renderer";
-import { createHead, renderHeadToString } from "@vueuse/head";
+import { basename } from 'node:path'
+import { renderToString } from 'vue/server-renderer'
+import { createApp } from './main'
 
-import App from "./App.vue";
+export async function render(manifest: Record<string, string[]>) {
+  const { app } = createApp()
 
-import Harlem from "@harlem/core";
-import { createServerSSRPlugin, getBridgingScriptBlock } from "@harlem/plugin-ssr";
+  const ctx = {}
+  const html = await renderToString(app, ctx)
 
-import type { ParameterizedContext } from "koa";
-
-export async function render (
-  ctx: ParameterizedContext,
-  manifest: Record<string, string[]>,
-): Promise<{
-    renderedHtml: string
-    preloadLinks: string
-    notFoundError: boolean
-    shouldRedirectTo: string | undefined
-    headTags: string
-    htmlAttrs: string
-    bodyAttrs: string
-  }> {
-  const app = createSSRApp(App);
-
-  app.use(Harlem, { plugins: [createServerSSRPlugin()] });
-
-  const head = createHead();
-  app.use(head);
-
-  const renderCtx: {modules?: string[]} = {};
-  let renderedHtml = await renderToString(app, renderCtx);
-  renderedHtml += getBridgingScriptBlock();
-
-  const { headTags, htmlAttrs, bodyAttrs } = renderHeadToString(head);
-
-  const preloadLinks = renderPreloadLinks(renderCtx.modules, manifest);
-
-  return {
-    renderedHtml,
-    preloadLinks,
-    notFoundError: false,
-    shouldRedirectTo: undefined,
-    headTags,
-    htmlAttrs,
-    bodyAttrs,
-  };
+  // @ts-expect-error
+  const preloadLinks = renderPreloadLinks(ctx.modules, manifest)
+  return { html, preloadLinks }
 }
 
-function renderPreloadLinks (modules: undefined | string[], manifest: Record<string, undefined | string[]>): string {
-  let links = "";
-  const seen = new Set();
-  if (modules === undefined) throw new Error();
+function renderPreloadLinks(modules: string[], manifest: Record<string, string[]>): string {
+  let links = ''
+  const seen = new Set()
   modules.forEach((id) => {
-    const files = manifest[id];
-    if (files !== undefined) {
+    const files = manifest[id]
+    if (files) {
       files.forEach((file) => {
         if (!seen.has(file)) {
-          seen.add(file);
-          links += renderPreloadLink(file);
+          seen.add(file)
+          const filename = basename(file)
+          if (manifest[filename]) {
+            for (const depFile of manifest[filename]) {
+              links += renderPreloadLink(depFile)
+              seen.add(depFile)
+            }
+          }
+          links += renderPreloadLink(file)
         }
-      });
+      })
     }
-  });
-  return links;
+  })
+  return links
 }
 
-function renderPreloadLink (file: string): string {
-  if (file.endsWith(".js")) {
-    return `<link rel="modulepreload" crossorigin href="${file}">`;
-  }
-  else if (file.endsWith(".css")) {
-    return `<link rel="stylesheet" href="${file}">`;
-  }
-  else {
-    return "";
+function renderPreloadLink(file: string) {
+  if (file.endsWith('.js')) {
+    return `<link rel="modulepreload" crossorigin href="${file}">`
+  } else if (file.endsWith('.css')) {
+    return `<link rel="stylesheet" href="${file}">`
+  } else if (file.endsWith('.woff')) {
+    return ` <link rel="preload" href="${file}" as="font" type="font/woff" crossorigin>`
+  } else if (file.endsWith('.woff2')) {
+    return ` <link rel="preload" href="${file}" as="font" type="font/woff2" crossorigin>`
+  } else if (file.endsWith('.gif')) {
+    return ` <link rel="preload" href="${file}" as="image" type="image/gif">`
+  } else if (file.endsWith('.jpg') || file.endsWith('.jpeg')) {
+    return ` <link rel="preload" href="${file}" as="image" type="image/jpeg">`
+  } else if (file.endsWith('.png')) {
+    return ` <link rel="preload" href="${file}" as="image" type="image/png">`
+  } else {
+    // TODO
+    return ''
   }
 }

@@ -1,62 +1,64 @@
-const fs = require("fs");
-const path = require("path");
+// @ts-check
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const Koa = require("koa");
-const koaConnect = require("koa-connect");
+import express from 'express'
+import { createServer as createViteServer } from 'vite'
 
-const vite = require("vite");
+export async function createServer() {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url))
+  const resolve = (p) => path.resolve(__dirname, p)
 
-const root = process.cwd();
-const resolve = (p) => path.resolve(__dirname, p);
+  const app = express()
 
-(async () => {
-  const app = new Koa();
-
-  const viteServer = await vite.createServer({
-    root,
+  /**
+   * @type {import('vite').ViteDevServer}
+   */
+  const viteServer = await createViteServer({
+    root: process.cwd(),
     logLevel: "error",
     server: {
       middlewareMode: true,
+      watch: {
+        usePolling: true,
+        interval: 100
+      },
     },
-  });
-  app.use(koaConnect(viteServer.middlewares));
+    appType: 'custom'
+  })
+  app.use(viteServer.middlewares)
 
-  app.use(async ctx => {
+  app.use('*', async (req, res) => {
     try {
+      const url = req.originalUrl
+
       let template = fs.readFileSync(resolve("index.html"), "utf-8");
-      template = await viteServer.transformIndexHtml(ctx.path, template);
+      template = await viteServer.transformIndexHtml(url, template);
       const { render } = await viteServer.ssrLoadModule("/src/entry-server.ts");
 
-      const {
-        renderedHtml,
-        notFoundError,
-        shouldRedirectTo,
-        headTags,
-        htmlAttrs,
-        bodyAttrs,
-      } = await render(ctx, {});
-
-      if (shouldRedirectTo !== undefined) {
-        ctx.status = 301;
-        ctx.redirect(shouldRedirectTo);
-        return;
-      }
+      const {html: appHtml, preloadLinks} = await render({})
 
       const html = template
-        .replace("<!--app-html-->", renderedHtml)
-        .replace("<html>", `<html${htmlAttrs}>`)
-        .replace("<body>", `<body${bodyAttrs}>`)
-        .replace("<!--head-tags-->", headTags);
+        .replace(`<!--app-html-->`, appHtml)
+        .replace(`<!--preload-links-->`, preloadLinks)
 
-      if (notFoundError) ctx.status = 404;
-      ctx.type = "text/html";
-      ctx.body = html;
+      res
+        .status(200)
+        .set({ 'Content-Type': 'text/html' })
+        .end(html)
     } catch (e) {
-      viteServer && viteServer.ssrFixStacktrace(e);
-      console.log(e.stack);
-      ctx.throw(500, e.stack);
+      viteServer.ssrFixStacktrace(e)
+      console.log(e.stack)
+      res.status(500).end(e.stack)
     }
-  });
+  })
 
-  app.listen(3000, () => console.log("http://localhost:3000"));
-})();
+  return { app }
+}
+
+createServer().then(({ app }) =>
+  app.listen(3000, () => {
+    console.log('http://localhost:3000')
+  })
+)
